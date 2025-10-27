@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rate-limit-app
+    ports:
+      - '5599:5588'  
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://rate-limit-redis:6379
+      - SUPABASE_URL=<your-supabase-url>
+      - SUPABASE_ANON_KEY=<your-supabase-anon-key>
+    depends_on:
+      - redis
+    networks:
+      - rate-limit-network
+
+  redis:
+    image: redis:latest
+    container_name: rate-limit-redis
+    ports:
+      - '6380:6379'  
+    networks:
+      - rate-limit-network
+    restart: always
+
+networks:
+  rate-limit-network:
+    driver: bridge

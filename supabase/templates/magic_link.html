@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Access for Rumsan AI Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #333333;
+            font-size: 24px;
+        }
+        .content {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .otp-code {
+            font-size: 36px;
+            font-weight: bold;
+            color: #007bff;
+            padding: 15px 25px;
+            background-color: #e9f5ff;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+            margin-top: 30px;
+            border-top: 1px solid #eeeeee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>One-Time Passcode (OTP)</h1>
+        </div>
+        <div class="content">
+            <p>Hi,</p>
+            <p>Use the following One-Time Passcode (OTP) to complete your action:</p>
+            <div class="otp-code">{{ .Token }}</div>
+            <p>This OTP is valid for 15 minutes.</p>
+            <p>If you did not request this OTP, please ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>Regards,<br>Rumsan AI Team</p>
+        </div>
+    </div>
+</body>
+</html>
