@@ -7,9 +7,13 @@ export const TokenBucketMiddleware = (redisClient: RedisClientType) => {
   const refillInterval = 10;
 
   return async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req.headers['x-user-id'] as string) || req.ip;
-    const key = `token-bucket:${userId}`;
-    console.log('TokenBucketMiddleware invoked for user:', userId);
+      if (req.url.startsWith('/api/rate-limiting')) {
+      return; // Let Swagger requests through
+    }
+
+    const userEmail = (req as any).user?.email || req.ip; 
+    const safeEmail = userEmail.replace(/[@.]/g, ':');
+    const key = `ratelimit:user:${safeEmail}`;
 
     const bucket = await redisClient.hGetAll(key);
     let tokens = bucket.tokens ? parseInt(bucket.tokens) : maxTokens;
@@ -45,5 +49,7 @@ export const TokenBucketMiddleware = (redisClient: RedisClientType) => {
     reply
       .header('X-RateLimit-Limit', maxTokens.toString())
       .header('X-RateLimit-Remaining', tokens.toString());
+      const bucketTTL = 40;
+      await redisClient.expire(key, bucketTTL);
   };
 };

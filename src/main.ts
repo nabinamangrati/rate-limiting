@@ -33,7 +33,14 @@ async function bootstrap() {
     credentials: true,
   });
   // Register UserMiddleware and TenantMiddleware globally
-  
+    const { UserMiddleware } = await import(
+    './common/middleware/user.middleware'
+  );
+  const {TokenBucketMiddleware} = await import(
+    './common/middleware/token-bucket.middleware'
+  );
+  const { PrismaService } = await import('./prisma/prisma.service');
+  const prisma = app.get(PrismaService);
   
   const { JwtService } = await import('@nestjs/jwt');
 
@@ -55,8 +62,10 @@ async function bootstrap() {
 app
 .getHttpAdapter()
 .getInstance()
-.addHook('preHandler', async (req, reply) => {
-  await TokenBucketMiddleware(redisClient)(req, reply);
+.addHook('preHandler', async (req, res) => {
+  await new UserMiddleware(jwtService, prisma).use(req, res, () => {});
+
+  await TokenBucketMiddleware(redisClient)(req, res);
 });
 
   app.setGlobalPrefix('api').enableVersioning({

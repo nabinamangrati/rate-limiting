@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis.module';
 import { TestModule } from './modules/test/test.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 
 @Module({
@@ -17,11 +18,8 @@ import { TestModule } from './modules/test/test.module';
     }),
     RedisModule,
     TestModule,
-
+    PrismaModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    // You can apply middlewares here if needed
-  }
-}
+export class AppModule {}
+
